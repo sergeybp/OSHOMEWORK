@@ -45,3 +45,25 @@ ssize_t write_(int fd, const void *buf, size_t num) {
 	
 	return res;
 }
+
+ssize_t read_until(int fd, void * buf, size_t num, char delimiter) 
+{
+	int curr, n;
+	for (curr = 0; curr < num; curr++) 
+	{
+		n = read(fd, buf + curr, 1);
+		if (n == 0)
+		{
+			return curr;
+		}
+		if (n == -1)
+		{
+			return -1;
+		}
+		if ((((char*)buf)[curr]) == delimiter)
+		{
+			return curr + 1;
+		}
+	}
+	return curr;
+}
