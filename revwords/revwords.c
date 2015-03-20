@@ -25,15 +25,15 @@ int main() {
     char word[4096];
     size_t pos = 0;
     size_t length;
-    while(length = read_until(STDIN_FILENO, buf, sizeof(buf), ' ')) 
+    while(1) 
     {
+	length = read_until(STDIN_FILENO, buf, sizeof(buf), ' ');
         if (length == -1) 
         {
             print_error();
             return 1;
         }
         int i = 0;
-        int pos = 0;
         while(i!=length)
         {
 			if(buf[i] == ' ')

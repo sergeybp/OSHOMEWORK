@@ -18,16 +18,19 @@ int main()
 	size_t num = sizeof(buf);
 	for(;;)
 	{
+
+		if ((len = read_(STDIN_FILENO, buf, num)) == -1) 
+		{
+			print_error();
+			exit(1);
+		}		
+
 		if (write_(STDOUT_FILENO, buf, len) < len) 
 		{
 			print_error();
 			exit(1);
 		}
-		if ((len = read_(STDIN_FILENO, buf, num)) == -1) 
-		{
-			print_error();
-			exit(1);
-		}
+		
 		if (len != num)
 		{
 			return 0;
