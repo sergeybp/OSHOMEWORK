@@ -16,6 +16,7 @@ int main(int argc, char *argv[]) {
     char word[4096];
     int num = sizeof(buf);
     size_t length;
+    int sn = strlen(argv[1]);
     
 	length = read_(STDIN_FILENO, buf, num);
         if (length == -1) 
@@ -27,16 +28,18 @@ int main(int argc, char *argv[]) {
         int d = 0;
         for(i = 0 ; i < length;i++)
         {
-			if(d>1)
+			if (length - i < sn) 
 			{
-				d--;
-				continue;
+				memmove(buf, buf + i, length - i);
+				int length1 = read_(STDIN_FILENO, buf + length - i, num);
+				length = length1 + length - i;
+				i = 0;
 			}
 			if(buf[i] == argv[1][0])
 			{
 				int j;
 				int u = 0;
-				for(j = 0 ; j < strlen(argv[1]);j++)
+				for(j = 0 ; j < sn;j++)
 				{
 					if(argv[1][j]!=buf[i+j])
 					{
@@ -50,7 +53,7 @@ int main(int argc, char *argv[]) {
 					write_(STDOUT_FILENO, &buf[i], (size_t)1);
 					continue;
 				}
-				d = strlen(argv[1]);
+				i+=sn-1;
 			}else{
 				write_(STDOUT_FILENO, &buf[i], (size_t)1);
 			}
