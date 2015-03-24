@@ -1,6 +1,6 @@
 #include "helpers.h"
 
-ssize_t read_(int fd, void *buf, size_t num) 
+size_t read_(int fd, void *buf, size_t num) 
 {
     size_t result = 0;
     size_t length = 0;
