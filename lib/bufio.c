@@ -111,6 +111,7 @@ ssize_t buf_getline(int fd, struct buf_t* buf, char* dest)
 #endif
     int i;
     ssize_t res = 0;
+    int dest_pos = 0;
     for(i = 0; i < buf->size; ++i) 
     {
         if(buf->buf[i] == '\n')
@@ -138,6 +139,8 @@ ssize_t buf_getline(int fd, struct buf_t* buf, char* dest)
         return i + 1;
     }
 }
+
+
 
 ssize_t buf_write(int fd, struct buf_t* buf, char* src, size_t len) 
 {
