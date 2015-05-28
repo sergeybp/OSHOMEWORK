@@ -100,3 +100,46 @@ ssize_t buf_flush(int fd, struct buf_t *buf, size_t required)
     }
     return res - buf->size;
 }
+
+
+ssize_t buf_getline(int fd, struct buf_t* buf, char* dest)
+{
+	ssize_t symbols_get = 0;
+	ssize_t all = 0;
+	ssize_t nread = 0;
+	while (1)
+	{
+		ssize_t res = -1;
+		ssize_t size = buf -> size;
+		int i = 0;
+		for (i = 0; i < size; i++)
+		{
+			char tmp = ((char*) buf -> buf)[i];
+			if (tmp == '\n')
+			{
+				memmove(dest, buf -> buf, i);
+				memmove(buf -> buf, buf -> buf + i + 1, buf -> size - i - 1);
+				buf -> size -= i + 1;
+				res = i + 1 + all - nread;
+				return res;
+			}
+		}	
+		if (buf -> size != 0)
+		{
+			memmove(dest, buf -> buf, size);
+			memmove(buf -> buf , buf -> buf + size + 1, buf -> size - size - 1);
+			buf -> size = 0;
+			dest = dest + size;
+		}	
+		res = size;	
+		symbols_get += buf -> size;	
+		nread = buf_fill(fd, buf, 1);
+		if (nread == 0)
+		{
+			break;
+		}	
+		all += nread;
+	}
+	return symbols_get;			
+}
+    
